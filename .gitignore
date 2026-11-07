@@ -1,0 +1,7 @@
+docs/PRD.md
+docs/TRD.md
+odd/
+.env*
+*.key
+*.pem
+.atl/

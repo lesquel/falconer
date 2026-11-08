@@ -81,6 +81,9 @@ to the host during pairing, so nothing changes on the host.
 `openmosh-hook doctor` warns when `sshd` accepts passwords. Key-only SSH is recommended:
 
 ```sh
-printf 'PasswordAuthentication no\nKbdInteractiveAuthentication no\nAuthenticationMethods publickey\n' \
-  | sudo tee /etc/ssh/sshd_config.d/10-openmosh.conf && sudo systemctl reload sshd
+openmosh-hook harden-ssh --dry-run   # see the file it writes
+openmosh-hook harden-ssh             # asks, then uses sudo; also `s` on the TUI Status screen
 ```
+
+It writes `/etc/ssh/sshd_config.d/10-openmosh.conf`, checks it with `sshd -t` and reloads sshd.
+Logins with a password over SSH stop working; key logins and the local console do not change.

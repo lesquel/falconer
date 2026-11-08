@@ -7,3 +7,6 @@
 [submodule "relay"]
 	path = relay
 	url = https://github.com/lesquel/openmosh-relay.git
+[submodule "web"]
+	path = web
+	url = https://github.com/lesquel/openmosh-web.git

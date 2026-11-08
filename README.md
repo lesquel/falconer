@@ -25,6 +25,7 @@ This is the umbrella repository. Components live in their own repos, referenced 
 | [`app/`](./app) | `openmosh-app` | Flutter + Rust mobile app (Android first) |
 | [`hook/`](./hook) | `openmosh-hook` | Rust daemon + CLI that runs on your host |
 | [`relay/`](./relay) | `openmosh-relay` | Optional self-hosted push relay for iOS (Phase 2) |
+| [`web/`](./web) | `openmosh-web` | Landing page (Astro, static, no trackers) |
 
 Clone everything:
 

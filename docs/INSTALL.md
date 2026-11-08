@@ -16,9 +16,12 @@
    ```
    Or open the terminal UI and do everything from there: `openmosh-hook`.
 3. **Phone:** install **ntfy** (F-Droid or Play Store) and open it once, then install the OpenMosh
-   APK from the latest release of `openmosh-app` (most phones: `openmosh-<version>-arm64-v8a.apk`).
-4. **Pair:** `openmosh-hook pair --alias my-host` on the host, then **Add host → Scan pairing code**
-   in the app. The code works once and expires in 5 minutes.
+   APK from the [latest `openmosh-app` release](https://github.com/lesquel/openmosh-app/releases/latest)
+   (most phones: `openmosh-<version>-arm64-v8a.apk`, about 15.5 MB; Android 9+ with a screen lock).
+4. **Pair:** `openmosh-hook pair --alias my-host` on the host, then **Scan pairing code** in the
+   app. The host asks `Pair "<name>" from <node> (<ip>)? [y/N]`; answer `y` within 60 s. The code
+   works once and expires in 5 minutes. Without ntfy the phone still pairs, with notifications
+   off; add them later with **Enable notifications** on the host screen.
 
 ## What you end up with
 
@@ -28,26 +31,35 @@
 | Tailscale | Private network between phone and host, no public ports. Pairing refuses to run without it | Yes |
 | Herdr (or tmux) | Keeps agents alive while the phone is away; Herdr also lets the computer follow the phone's tab | Yes (one of them) |
 | `openmosh-hook` | Watches agents, sends encrypted pushes, executes approvals | Yes |
-| ntfy app on the phone | UnifiedPush distributor on Android (`ntfy.sh` sees only ciphertext, or self-host) | Yes |
+| ntfy app on the phone | UnifiedPush distributor on Android (`ntfy.sh` sees only ciphertext, or self-host) | For notifications |
 
 ## The installer
 
 `install.sh` detects the OS and architecture, downloads `openmosh-hook-<target>.tar.gz` from the
 latest GitHub release, verifies `SHA256SUMS` and its **minisign signature** (pinned key
-`RWTiZ1vxHn/jWfqAEjobeqloI9cL9pOA0/in+ayyCgPqT0gYDRKR1Ox5`) when `minisign` or `rsign` is
-installed, puts the binary in `~/.local/bin`, writes the config, installs the user service and runs
-`doctor`. It prints every command and never calls `sudo`.
+`RWTiZ1vxHn/jWfqAEjobeqloI9cL9pOA0/in+ayyCgPqT0gYDRKR1Ox5`, trusted comment
+`openmosh-hook <tag>`), puts the binary in `~/.local/bin`, writes the config, installs the user service and runs
+`doctor`. It prints every command and never calls `sudo`. The signature is required: install
+`minisign` (`apt`/`dnf`/`pacman`/`brew install minisign`) or `rsign` (`cargo install rsign2
+--locked`) first, or the installer stops before downloading.
 
 | Flag | Effect |
 |---|---|
 | `--dry-run` | Print every step, change nothing |
-| `--version <tag>` | Install a specific release instead of the latest |
-| `--require-signature` | Abort when no minisign verifier is installed |
+| `--version <tag>` | Install `vX.Y.Z` or a pre-release `vX.Y.Z-rc.N` instead of the latest stable release |
+| `--insecure-no-signature` | Check the checksums only, without the signature. Not recommended |
 | `--from-source` | Build with `cargo install --git … --locked` |
 | `--binary <path>` | Install a binary you already built |
 | `--yes`, `--no-service` | Accept the Herdr/Tailscale offers; skip the service |
 
 Platforms: Linux x86_64 and aarch64 (static musl), macOS x86_64 and Apple Silicon.
+
+### Release channels
+
+| Channel | Tags | How to get it |
+|---|---|---|
+| Stable | `vX.Y.Z` | Default (`/releases/latest`) |
+| Pre-release | `vX.Y.Z-rc.N` | `install.sh --version vX.Y.Z-rc.N`; never marked "latest" |
 
 ## Setup, agents and the TUI
 
@@ -56,8 +68,18 @@ Platforms: Linux x86_64 and aarch64 (static musl), macOS x86_64 and Apple Silico
 - Supported agents: Claude Code, Codex CLI, Gemini CLI, Cursor, GitHub Copilot CLI, Kiro, OpenCode
   and Aider (Amp: approvals only, no hook mechanism). `openmosh-hook integration list` shows what
   is detected and installed. Herdr detects agents on its own as well.
-- `openmosh-hook` (no arguments) opens the TUI: status, agents and inbox, devices, pairing,
-  integrations, setup and uninstall.
+- `openmosh-hook` (no arguments) opens the TUI: status (`doctor`), agents and inbox, devices,
+  pairing, integrations, setup and uninstall.
+- **Open Herdr** in the app runs `openmosh-hook attach herdr`, which mirrors focus: the computer
+  follows the tab and workspace picked on the phone, and the other way round.
+- `openmosh-hook usage` reports token usage per agent, project and model (Codex only: Claude Code
+  keeps no local usage summary, so it is not read).
+
+## Lost phone
+
+`openmosh-hook devices revoke <id>` (or `x` on the TUI Devices screen, or *Revoke* in the app)
+removes the phone's key and push key, ends its live SSH sessions and prints a checklist of what
+else to do.
 
 ## Uninstall
 

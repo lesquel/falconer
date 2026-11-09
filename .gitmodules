@@ -1,12 +1,16 @@
 [submodule "app"]
 	path = app
 	url = https://github.com/lesquel/openmosh-app.git
+	branch = main
 [submodule "hook"]
 	path = hook
 	url = https://github.com/lesquel/openmosh-hook.git
+	branch = main
 [submodule "relay"]
 	path = relay
 	url = https://github.com/lesquel/openmosh-relay.git
+	branch = main
 [submodule "web"]
 	path = web
 	url = https://github.com/lesquel/openmosh-web.git
+	branch = main

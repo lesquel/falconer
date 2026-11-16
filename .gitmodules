@@ -1,16 +1,16 @@
 [submodule "app"]
 	path = app
-	url = https://github.com/lesquel/openmosh-app.git
+	url = https://github.com/lesquel/falconer-app.git
 	branch = main
 [submodule "hook"]
 	path = hook
-	url = https://github.com/lesquel/openmosh-hook.git
+	url = https://github.com/lesquel/falconer-hook.git
 	branch = main
 [submodule "relay"]
 	path = relay
-	url = https://github.com/lesquel/openmosh-relay.git
+	url = https://github.com/lesquel/falconer-relay.git
 	branch = main
 [submodule "web"]
 	path = web
-	url = https://github.com/lesquel/openmosh-web.git
+	url = https://github.com/lesquel/falconer-web.git
 	branch = main

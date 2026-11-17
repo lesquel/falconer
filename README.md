@@ -9,6 +9,9 @@ You run everything: your phone, your host, your network. There is no OpenMosh cl
 > Current version: **v0.2.0**. Android (9+) today, iOS later. Free and open source: app GPL-3.0,
 > hook Apache-2.0.
 
+**Demo (4:50):** [docs/media/falconer-demo.mp4](docs/media/falconer-demo.mp4): browse Herdr agents, fix a
+bug from the phone, approve a permission card, dictate a prompt, open the terminal, change colors.
+
 ## What you get
 
 - A push when an agent needs you, end-to-end encrypted; approvals show the command being approved.

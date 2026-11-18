@@ -6,7 +6,7 @@ Supervise Claude Code, Codex, OpenCode and other agents from your phone: get a p
 approve or deny with one tap, open the terminal, paste a screenshot. You run everything: your phone, your
 computer, your tailnet. There is no Falconer cloud.
 
-> Current version: **v0.2.0**. Android 9+ today, iOS later. App GPL-3.0, hook Apache-2.0.
+> Current version: **v0.3.0**. Android 9+ today, iOS later. App GPL-3.0, hook Apache-2.0.
 
 **Demo (4:50):** [docs/media/falconer-demo.mp4](docs/media/falconer-demo.mp4): browse Herdr agents, fix a bug from
 the phone, approve a permission card, dictate a prompt, open the terminal, change colors.
@@ -67,7 +67,7 @@ falconer-hook pair --alias my-computer
 Prefer to read the installer first? Download the tag-pinned script, inspect it, then run it:
 
 ```sh
-curl -fsSLO https://raw.githubusercontent.com/lesquel/falconer-hook/v0.2.0/install.sh
+curl -fsSLO https://raw.githubusercontent.com/lesquel/falconer-hook/v0.3.0/install.sh
 less install.sh
 sh install.sh
 ```

@@ -16,13 +16,13 @@
 
    To read the installer before running it, use the tag-pinned copy:
    ```sh
-   curl -fsSLO https://raw.githubusercontent.com/lesquel/falconer-hook/v0.2.0/install.sh
+   curl -fsSLO https://raw.githubusercontent.com/lesquel/falconer-hook/v0.3.0/install.sh
    less install.sh
    sh install.sh
    ```
 3. **Phone:** install **ntfy** (F-Droid or Play Store) and open it once, then install the Falconer
    APK from the [latest `falconer-app` release](https://github.com/lesquel/falconer-app/releases/latest)
-   (most phones: `openmosh-v<version>-arm64-v8a.apk`, the asset keeps its pre-rename name, about 15.5 MB; Android 9+ with a screen lock).
+   (most phones: `falconer-v<version>-arm64-v8a.apk`, about 26 MB; Android 9+ with a screen lock).
 4. **Pair:** `falconer-hook pair --alias my-host` on the host, then **Scan pairing code** in the
    app. The host asks `Pair "<name>" from <node> (<ip>)? [y/N]`; answer `y` within 60 s. The code
    works once and expires in 5 minutes. Without ntfy the phone still pairs, with notifications

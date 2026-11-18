@@ -1,9 +1,7 @@
-# OpenMosh — Install
+# Falconer — Install
 
-> The repositories are private for now. Until they are public, release downloads need the GitHub
-> CLI logged in to an account with access (`gh auth login`); the installer uses it automatically.
-> Everything runs on **your** host (laptop, workstation or VPS) and your phone. There is no
-> OpenMosh server.
+> Everything runs on **your** computer (laptop, workstation or VPS) and your phone. There is no Falconer server.
+> The phone and the computer reach each other over your Tailscale network.
 
 ## In 4 steps
 
@@ -11,14 +9,21 @@
    then `sudo tailscale up`). Do the same on the phone with the same Tailscale account.
 2. **Host:** install the hook and run the guided setup:
    ```sh
-   curl -fsSL https://raw.githubusercontent.com/lesquel/openmosh-hook/main/install.sh | sh
-   openmosh-hook setup
+   curl -fsSL https://raw.githubusercontent.com/lesquel/falconer-hook/main/install.sh | sh
+   falconer-hook setup
    ```
-   Or open the terminal UI and do everything from there: `openmosh-hook`.
-3. **Phone:** install **ntfy** (F-Droid or Play Store) and open it once, then install the OpenMosh
-   APK from the [latest `openmosh-app` release](https://github.com/lesquel/openmosh-app/releases/latest)
-   (most phones: `openmosh-<version>-arm64-v8a.apk`, about 15.5 MB; Android 9+ with a screen lock).
-4. **Pair:** `openmosh-hook pair --alias my-host` on the host, then **Scan pairing code** in the
+   Or open the terminal UI and do everything from there: `falconer-hook`.
+
+   To read the installer before running it, use the tag-pinned copy:
+   ```sh
+   curl -fsSLO https://raw.githubusercontent.com/lesquel/falconer-hook/v0.2.0/install.sh
+   less install.sh
+   sh install.sh
+   ```
+3. **Phone:** install **ntfy** (F-Droid or Play Store) and open it once, then install the Falconer
+   APK from the [latest `falconer-app` release](https://github.com/lesquel/falconer-app/releases/latest)
+   (most phones: `openmosh-v<version>-arm64-v8a.apk`, the asset keeps its pre-rename name, about 15.5 MB; Android 9+ with a screen lock).
+4. **Pair:** `falconer-hook pair --alias my-host` on the host, then **Scan pairing code** in the
    app. The host asks `Pair "<name>" from <node> (<ip>)? [y/N]`; answer `y` within 60 s. The code
    works once and expires in 5 minutes. Without ntfy the phone still pairs, with notifications
    off; add them later with **Enable notifications** on the host screen.
@@ -30,15 +35,15 @@
 | `sshd` | The app connects here | Yes |
 | Tailscale | Private network between phone and host, no public ports. Pairing refuses to run without it | Yes |
 | Herdr (or tmux) | Keeps agents alive while the phone is away; Herdr also lets the computer follow the phone's tab | Yes (one of them) |
-| `openmosh-hook` | Watches agents, sends encrypted pushes, executes approvals | Yes |
+| `falconer-hook` | Watches agents, sends encrypted pushes, executes approvals | Yes |
 | ntfy app on the phone | UnifiedPush distributor on Android (`ntfy.sh` sees only ciphertext, or self-host) | For notifications |
 
 ## The installer
 
-`install.sh` detects the OS and architecture, downloads `openmosh-hook-<target>.tar.gz` from the
+`install.sh` detects the OS and architecture, downloads `falconer-hook-<target>.tar.gz` from the
 latest GitHub release, verifies `SHA256SUMS` and its **minisign signature** (pinned key
 `RWTiZ1vxHn/jWfqAEjobeqloI9cL9pOA0/in+ayyCgPqT0gYDRKR1Ox5`, trusted comment
-`openmosh-hook <tag>`), puts the binary in `~/.local/bin`, writes the config, installs the user service and runs
+`falconer-hook <tag>`), puts the binary in `~/.local/bin`, writes the config, installs the user service and runs
 `doctor`. It prints every command and never calls `sudo`. The signature is required: install
 `minisign` (`apt`/`dnf`/`pacman`/`brew install minisign`) or `rsign` (`cargo install rsign2
 --locked`) first, or the installer stops before downloading.
@@ -63,34 +68,36 @@ Platforms: Linux x86_64 and aarch64 (static musl), macOS x86_64 and Apple Silico
 
 ## Setup, agents and the TUI
 
-- `openmosh-hook setup` writes the config, installs the service, offers an integration for every
+- `falconer-hook setup` writes the config, installs the service, offers an integration for every
   agent it detects and prints the next step.
-- Supported agents: Claude Code, Codex CLI, Gemini CLI, Cursor, GitHub Copilot CLI, Kiro, OpenCode
-  and Aider (Amp: approvals only, no hook mechanism). `openmosh-hook integration list` shows what
+- Supported agents: Claude Code, Codex CLI, Gemini CLI, Cursor, GitHub Copilot CLI, Kiro CLI, OpenCode
+  and Aider through their own hooks; Amp and Pi through Herdr. `falconer-hook integration list` shows what
   is detected and installed. Herdr detects agents on its own as well.
-- `openmosh-hook` (no arguments) opens the TUI: status (`doctor`), agents and inbox, devices,
+- `falconer-hook` (no arguments) opens the TUI: status (`doctor`), agents and inbox, devices,
   pairing, integrations, setup and uninstall.
-- **Open Herdr** in the app runs `openmosh-hook attach herdr`, which mirrors focus: the computer
+- **Open Herdr** in the app runs `falconer-hook attach herdr`, which mirrors focus: the computer
   follows the tab and workspace picked on the phone, and the other way round.
-- `openmosh-hook usage` reports token usage per agent, project and model (Codex only: Claude Code
+- `falconer-hook usage` reports token usage per agent, project and model (Codex only: Claude Code
   keeps no local usage summary, so it is not read).
 
 ## Lost phone
 
-`openmosh-hook devices revoke <id>` (or `x` on the TUI Devices screen, or *Revoke* in the app)
+`falconer-hook devices revoke <id>` (or `x` on the TUI Devices screen, or *Revoke* in the app)
 removes the phone's key and push key, ends its live SSH sessions and prints a checklist of what
 else to do.
 
 ## Uninstall
 
 ```sh
-openmosh-hook uninstall --dry-run   # see exactly what would be removed
-openmosh-hook uninstall             # service, integrations, openmosh: SSH keys, devices, state, config
-openmosh-hook uninstall --all       # also deletes the binary
+falconer-hook uninstall --dry-run   # see exactly what would be removed
+falconer-hook uninstall             # service, integrations, paired SSH keys, devices, state, config
+falconer-hook uninstall --all       # also deletes the binary
 ```
 
-It only removes what OpenMosh created: `authorized_keys` lines tagged `openmosh:`, its own
-integration entries, and the `openmosh` config and state directories.
+It only removes what Falconer created: `authorized_keys` lines tagged `openmosh:` (the tag keeps its
+pre-rename name), its own integration entries, and the `falconer` config and state directories. The sshd
+drop-in from `harden-ssh` is kept and listed with the command to remove it, because removing it turns password
+logins back on.
 
 ## Self-hosting ntfy (optional)
 
@@ -100,12 +107,12 @@ to the host during pairing, so nothing changes on the host.
 
 ## Recommended host hardening
 
-`openmosh-hook doctor` warns when `sshd` accepts passwords. Key-only SSH is recommended:
+`falconer-hook doctor` warns when `sshd` accepts passwords. Key-only SSH is recommended:
 
 ```sh
-openmosh-hook harden-ssh --dry-run   # see the file it writes
-openmosh-hook harden-ssh             # asks, then uses sudo; also `s` on the TUI Status screen
+falconer-hook harden-ssh --dry-run   # see the file it writes
+falconer-hook harden-ssh             # asks, then uses sudo; also `s` on the TUI Status screen
 ```
 
-It writes `/etc/ssh/sshd_config.d/10-openmosh.conf`, checks it with `sshd -t` and reloads sshd.
+It writes `/etc/ssh/sshd_config.d/10-falconer.conf`, checks it with `sshd -t` and reloads sshd.
 Logins with a password over SSH stop working; key logins and the local console do not change.

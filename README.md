@@ -137,4 +137,4 @@ requests. Everyone taking part follows the [Code of Conduct](./CODE_OF_CONDUCT.m
 
 ## License
 
-App GPL-3.0, hook Apache-2.0 (each repository's `LICENSE`). Relay: proposed Apache-2.0. Umbrella and web: pending.
+App GPL-3.0; hook, web and this repository Apache-2.0 (each repository's `LICENSE`). Relay: proposed Apache-2.0, no code yet.
